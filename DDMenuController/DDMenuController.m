@@ -340,7 +340,7 @@
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
     if (gestureRecognizer==_tap) {
         return YES;
-    }
+    }     
     return NO;
 }
 
@@ -401,7 +401,8 @@
 - (void)showRootController:(BOOL)animated {
     
     [_tap setEnabled:NO];
-    
+    _root.view.userInteractionEnabled = YES;
+
     CGRect frame = _root.view.frame;
     frame.origin.x = 0.0f;
 
@@ -463,6 +464,7 @@
         [UIView setAnimationsEnabled:NO];
     }
     
+    _root.view.userInteractionEnabled = NO;
     [UIView animateWithDuration:.3 animations:^{
         _root.view.frame = frame;
     } completion:^(BOOL finished) {
@@ -488,7 +490,8 @@
     }
     _menuFlags.showingRightView = YES;
     [self showShadow:YES];
-    
+    _root.view.userInteractionEnabled = NO;
+
     UIView *view = self.rightViewController.view;
     CGRect frame = self.view.bounds;
     view.frame = frame;
