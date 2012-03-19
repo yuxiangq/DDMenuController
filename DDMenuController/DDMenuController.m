@@ -181,7 +181,7 @@
         
         _panVelocity = velocity;        
         CGPoint translation = [gesture translationInView:self.view];
-        CGRect frame = self.view.frame;
+        CGRect frame = _root.view.frame;
         frame.origin.x = _panOriginX + translation.x;
         
         if (frame.origin.x > 0.0f && !_menuFlags.showingLeftView) {
@@ -194,7 +194,9 @@
             if (_menuFlags.canShowLeft) {
                 
                 _menuFlags.showingLeftView = YES;
-                [self.view.superview insertSubview:self.leftViewController.view belowSubview:self.view];
+                CGRect frame = self.view.bounds;
+                self.leftViewController.view.frame = frame;
+                [self.view insertSubview:self.leftViewController.view atIndex:0];
                 
             } else {
                 frame.origin.x = 0.0f; // ignore right view if it's not set
@@ -210,9 +212,9 @@
             if (_menuFlags.canShowRight) {
                 
                 _menuFlags.showingRightView = YES;
-                CGRect frame = [[UIScreen mainScreen] applicationFrame];
+                CGRect frame = self.view.bounds;
                 self.rightViewController.view.frame = frame;
-                [self.view.superview insertSubview:self.rightViewController.view belowSubview:self.view];
+                [self.view insertSubview:self.rightViewController.view atIndex:0];
      
             } else {
                 frame.origin.x = 0.0f; // ignore left view if it's not set
@@ -220,7 +222,7 @@
             
         }
         
-        self.view.frame = frame;
+        _root.view.frame = frame;
 
     } else if (gesture.state == UIGestureRecognizerStateEnded || gesture.state == UIGestureRecognizerStateCancelled) {
         
@@ -240,8 +242,8 @@
             velocity.x *= -1.0f;
         }
         BOOL bounce = (velocity.x > 800);
-        CGFloat originX = self.view.frame.origin.x;
-        CGFloat width = self.view.frame.size.width;
+        CGFloat originX = _root.view.frame.origin.x;
+        CGFloat width = _root.view.frame.size.width;
         CGFloat span = (width - kMenuOverlayWidth);
         CGFloat duration = kMenuSlideDuration; // default duration with 0 velocity
         
@@ -261,11 +263,11 @@
             } else {
                 [self showRootController:NO];
             }
-            [self.view.layer removeAllAnimations];
+            [_root.view.layer removeAllAnimations];
             [self.view setUserInteractionEnabled:YES];
         }];
         
-        CGPoint pos = self.view.layer.position;
+        CGPoint pos = _root.view.layer.position;
         CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"position"];
         
         NSMutableArray *keyTimes = [[NSMutableArray alloc] initWithCapacity:bounce ? 3 : 2];
@@ -319,7 +321,7 @@
         animation.duration = duration;   
         animation.removedOnCompletion = NO;
         animation.fillMode = kCAFillModeForwards;
-        [self.view.layer addAnimation:animation forKey:nil];
+        [_root.view.layer addAnimation:animation forKey:nil];
         [CATransaction commit];   
     
     }    
@@ -483,6 +485,7 @@
     UIView *view = self.leftViewController.view;
     view.frame = self.view.bounds;
     [self.view insertSubview:view atIndex:0];
+    [self.leftViewController viewWillAppear:animated];
     
     CGRect frame = _root.view.frame;
     frame.origin.x = (CGRectGetMaxX(view.frame) - kMenuOverlayWidth);
@@ -570,10 +573,15 @@
     
     if (_root) {
         
+        if (tempRoot) {
+            [tempRoot.view removeFromSuperview];
+            tempRoot = nil;
+        }
+        
         UIView *view = _root.view;
         view.frame = self.view.bounds;
         [self.view addSubview:view];
-        
+
         UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pan:)];
         pan.delegate = (id<UIGestureRecognizerDelegate>)self;
         [view addGestureRecognizer:pan];
