@@ -18,11 +18,13 @@
 		033A464A14869403002014C7 /* LeftController.m in Sources */ = {isa = PBXBuildFile; fileRef = 033A464914869403002014C7 /* LeftController.m */; };
 		033A464D1486940E002014C7 /* FeedController.m in Sources */ = {isa = PBXBuildFile; fileRef = 033A464C1486940E002014C7 /* FeedController.m */; };
 		033A46511486AA23002014C7 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 033A46501486AA23002014C7 /* QuartzCore.framework */; };
+		033CE89D1513CCEB0033B4B5 /* nav_menu_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 033CE89C1513CCEB0033B4B5 /* nav_menu_icon@2x.png */; };
 		03B5CAE41486DDD900F111BB /* left.png in Resources */ = {isa = PBXBuildFile; fileRef = 03B5CAE21486DDD900F111BB /* left.png */; };
 		03B5CAE51486DDD900F111BB /* right.png in Resources */ = {isa = PBXBuildFile; fileRef = 03B5CAE31486DDD900F111BB /* right.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		03312D49151794B900E9C00F /* DDMenuController.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = DDMenuController.entitlements; sourceTree = "<group>"; };
 		033A4621148691F6002014C7 /* DDMenuController.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DDMenuController.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		033A4625148691F6002014C7 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		033A4627148691F6002014C7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -42,6 +44,7 @@
 		033A464B1486940E002014C7 /* FeedController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FeedController.h; sourceTree = "<group>"; };
 		033A464C1486940E002014C7 /* FeedController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FeedController.m; sourceTree = "<group>"; };
 		033A46501486AA23002014C7 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		033CE89C1513CCEB0033B4B5 /* nav_menu_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "nav_menu_icon@2x.png"; sourceTree = "<group>"; };
 		03B5CAE21486DDD900F111BB /* left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = left.png; sourceTree = "<group>"; };
 		03B5CAE31486DDD900F111BB /* right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = right.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -92,6 +95,8 @@
 		033A462B148691F6002014C7 /* DDMenuController */ = {
 			isa = PBXGroup;
 			children = (
+				03312D49151794B900E9C00F /* DDMenuController.entitlements */,
+				033CE89A1513CCE30033B4B5 /* Resources */,
 				03B5CAD81486DDB700F111BB /* DemoImages */,
 				033A463C1486936D002014C7 /* Controllers */,
 				033A463E14869377002014C7 /* Views */,
@@ -170,6 +175,14 @@
 			path = RightController;
 			sourceTree = "<group>";
 		};
+		033CE89A1513CCE30033B4B5 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				033CE89C1513CCEB0033B4B5 /* nav_menu_icon@2x.png */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		03B5CAD81486DDB700F111BB /* DemoImages */ = {
 			isa = PBXGroup;
 			children = (
@@ -205,7 +218,7 @@
 		033A4618148691F6002014C7 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0440;
 			};
 			buildConfigurationList = 033A461B148691F6002014C7 /* Build configuration list for PBXProject "DDMenuController" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -232,6 +245,7 @@
 				033A4630148691F6002014C7 /* InfoPlist.strings in Resources */,
 				03B5CAE41486DDD900F111BB /* left.png in Resources */,
 				03B5CAE51486DDD900F111BB /* right.png in Resources */,
+				033CE89D1513CCEB0033B4B5 /* nav_menu_icon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -313,6 +327,7 @@
 		033A463A148691F6002014C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = DDMenuController/DDMenuController.entitlements;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DDMenuController/DDMenuController-Prefix.pch";
 				INFOPLIST_FILE = "DDMenuController/DDMenuController-Info.plist";

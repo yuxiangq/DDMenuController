@@ -23,14 +23,16 @@
     // Override point for customization after application launch.
 
     FeedController *mainController = [[FeedController alloc] init];
-    DDMenuController *rootController = [[DDMenuController alloc] initWithRootViewController:mainController];
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:mainController];
+    
+    DDMenuController *rootController = [[DDMenuController alloc] initWithRootViewController:navController];
     _menuController = rootController;
     
     LeftController *leftController = [[LeftController alloc] init];
-    rootController.leftController = leftController;
+    rootController.leftViewController = leftController;
     
     RightController *rightController = [[RightController alloc] init];
-    rootController.rightController = rightController;
+    rootController.rightViewController = rightController;
     
     self.window.rootViewController = rootController;
     

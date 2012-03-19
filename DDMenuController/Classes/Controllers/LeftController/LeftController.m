@@ -1,15 +1,16 @@
 //
-//  RightController.m
+//  LeftController.m
 //  DDMenuController
 //
 //  Created by Devin Doty on 11/30/11.
 //  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import "RightController.h"
+#import "LeftController.h"
 #import "FeedController.h"
+#import "DDMenuController.h"
 
-@implementation RightController
+@implementation LeftController
 
 @synthesize tableView=_tableView;
 
@@ -23,6 +24,10 @@
     [super didReceiveMemoryWarning];
 }
 
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
+    return YES;
+}
+
 
 #pragma mark - View lifecycle
 
@@ -34,11 +39,9 @@
         tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         tableView.delegate = (id<UITableViewDelegate>)self;
         tableView.dataSource = (id<UITableViewDataSource>)self;
-        tableView.backgroundColor = [UIColor scrollViewTexturedBackgroundColor];
         [self.view addSubview:tableView];
         self.tableView = tableView;
     }
-    
 }
 
 - (void)viewDidUnload {
@@ -50,7 +53,7 @@
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)tableView:(UITableView*)tableView numberOfRowsInSection:(NSInteger)section {
-    return 8;
+    return 4;
 }
 
 - (UITableViewCell*)tableView:(UITableView*)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -59,8 +62,11 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if(cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
+    
+    /* 
+     * Content in this cell should be inset the size of kMenuOverlayWidth
+     */
     
     cell.textLabel.text = [NSString stringWithFormat:@"Cell %i", indexPath.row];
     
@@ -69,20 +75,26 @@
 }
 
 - (NSString*)tableView:(UITableView*)tableView titleForHeaderInSection:(NSInteger)section {
-    return @"Right Controller";
+    return @"Left Controller";
 }
+
 
 #pragma mark - UITableViewDelegate
 
 - (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    // lets just push another feed view 
-    UINavigationController *menuController = (UINavigationController*)((AppDelegate*)[[UIApplication sharedApplication] delegate]).menuController;
+    // set the root controller
+    DDMenuController *menuController = (DDMenuController*)((AppDelegate*)[[UIApplication sharedApplication] delegate]).menuController;
     FeedController *controller = [[FeedController alloc] init];
-    [menuController pushViewController:controller animated:YES];
-    
+    controller.title = [NSString stringWithFormat:@"Cell %i", indexPath.row];
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:controller];
+
+    [menuController setRootController:navController animated:YES];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
+    
 }
+
+
 
 @end
