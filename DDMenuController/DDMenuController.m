@@ -72,6 +72,15 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setRootViewController:_root]; // reset root
+    
+    if (!_tap) {
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
+        tap.delegate = (id<UIGestureRecognizerDelegate>)self;
+        [self.view addGestureRecognizer:tap];
+        [tap setEnabled:NO];
+        _tap = tap;
+    }
+    
 }
 
 - (void)viewDidUnload {
@@ -87,9 +96,12 @@
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
-    
+    [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+
     if (_root) {
         
+        [_root willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
+
         UIView *view = _root.view;
 
         if (_menuFlags.showingRightView) {
@@ -111,9 +123,12 @@
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
-    
+    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+
     if (_root) {
         
+        [_root didRotateFromInterfaceOrientation:fromInterfaceOrientation];
+
         CGRect frame = self.view.bounds;
         if (_menuFlags.showingLeftView) {
             frame.origin.x = frame.size.width - kMenuOverlayWidth;
@@ -125,6 +140,15 @@
         
         [self showShadow:(_root.view.layer.shadowOpacity!=0.0f)];
         
+    }
+    
+}
+
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
+	[super willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
+
+    if (_root) {
+        [_root willAnimateRotationToInterfaceOrientation:toInterfaceOrientation duration:duration];
     }
     
 }
@@ -329,7 +353,11 @@
     
     if (gestureRecognizer == _tap) {
         
-        return (_menuFlags.showingRightView || _menuFlags.showingLeftView);
+        if (_root && (_menuFlags.showingRightView || _menuFlags.showingLeftView)) {
+            return CGRectContainsPoint(_root.view.frame, [gestureRecognizer locationInView:self.view]);
+        }
+        
+        return NO;
         
     }
 
@@ -490,7 +518,6 @@
     }
     _menuFlags.showingRightView = YES;
     [self showShadow:YES];
-    _root.view.userInteractionEnabled = NO;
 
     UIView *view = self.rightViewController.view;
     CGRect frame = self.view.bounds;
@@ -505,6 +532,7 @@
         [UIView setAnimationsEnabled:NO];
     }
     
+    _root.view.userInteractionEnabled = NO;
     [UIView animateWithDuration:.3 animations:^{
         _root.view.frame = frame;
     } completion:^(BOOL finished) {
@@ -545,12 +573,6 @@
         UIView *view = _root.view;
         view.frame = self.view.bounds;
         [self.view addSubview:view];
-        
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
-        tap.delegate = (id<UIGestureRecognizerDelegate>)self;
-        [view addGestureRecognizer:tap];
-        [tap setEnabled:NO];
-        _tap = tap;
         
         UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pan:)];
         pan.delegate = (id<UIGestureRecognizerDelegate>)self;
