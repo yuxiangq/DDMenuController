@@ -26,7 +26,9 @@
 
 #import "DDMenuController.h"
 
-#define kMenuOverlayWidth 40.0f
+#define kMenuFullWidth 320.0f
+#define kMenuDisplayedWidth 280.0f
+#define kMenuOverlayWidth (self.view.bounds.size.width - kMenuDisplayedWidth)
 #define kMenuBounceOffset 10.0f
 #define kMenuBounceDuration .3f
 #define kMenuSlideDuration .3f
@@ -90,9 +92,7 @@
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
-    
-    return YES;
-    
+    return [_root shouldAutorotateToInterfaceOrientation:toInterfaceOrientation];
 }
 
 - (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration {
@@ -195,6 +195,7 @@
                 
                 _menuFlags.showingLeftView = YES;
                 CGRect frame = self.view.bounds;
+				frame.size.width = kMenuFullWidth;
                 self.leftViewController.view.frame = frame;
                 [self.view insertSubview:self.leftViewController.view atIndex:0];
                 
@@ -213,6 +214,8 @@
                 
                 _menuFlags.showingRightView = YES;
                 CGRect frame = self.view.bounds;
+				frame.origin.x += frame.size.width - kMenuFullWidth;
+				frame.size.width = kMenuFullWidth;
                 self.rightViewController.view.frame = frame;
                 [self.view insertSubview:self.rightViewController.view atIndex:0];
      
@@ -483,12 +486,14 @@
     [self showShadow:YES];
 
     UIView *view = self.leftViewController.view;
-    view.frame = self.view.bounds;
+	CGRect frame = self.view.bounds;
+	frame.size.width = kMenuFullWidth;
+    view.frame = frame;
     [self.view insertSubview:view atIndex:0];
     [self.leftViewController viewWillAppear:animated];
     
-    CGRect frame = _root.view.frame;
-    frame.origin.x = (CGRectGetMaxX(view.frame) - kMenuOverlayWidth);
+    frame = _root.view.frame;
+    frame.origin.x = CGRectGetMaxX(view.frame) - (kMenuFullWidth - kMenuDisplayedWidth);
     
     BOOL _enabled = [UIView areAnimationsEnabled];
     if (!animated) {
@@ -524,6 +529,8 @@
 
     UIView *view = self.rightViewController.view;
     CGRect frame = self.view.bounds;
+	frame.origin.x += frame.size.width - kMenuFullWidth;
+	frame.size.width = kMenuFullWidth;
     view.frame = frame;
     [self.view insertSubview:view atIndex:0];
     
