@@ -40,7 +40,7 @@
 
 @implementation DDMenuController
 
-@synthesize delegate;
+@synthesize delegate, barButtonItemClass;
 
 @synthesize leftViewController=_left;
 @synthesize rightViewController=_right;
@@ -51,7 +51,7 @@
 
 
 - (id)initWithRootViewController:(UIViewController*)controller {
-    if ((self = [super init])) {
+    if ((self = [self init])) {
         _root = controller;
     }
     return self;
@@ -59,7 +59,7 @@
 
 - (id)init {
     if ((self = [super init])) {
-        
+        self.barButtonItemClass = [UIBarButtonItem class];
     }
     return self;
 }
@@ -403,17 +403,21 @@
     }
     
     if (_menuFlags.canShowLeft) {
-        UIBarButtonItem *button = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_menu_icon.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(showLeft:)];
+        UIBarButtonItem *button = [[barButtonItemClass alloc] initWithImage:[UIImage imageNamed:@"nav_menu_icon.png"] style:UIBarButtonItemStyleBordered target:self action:@selector(showLeft:)];
         topController.navigationItem.leftBarButtonItem = button;
     } else {
-        topController.navigationItem.leftBarButtonItem = nil;
+		if(topController.navigationItem.leftBarButtonItem.target == self) {
+			topController.navigationItem.leftBarButtonItem = nil;
+		}
     }
     
     if (_menuFlags.canShowRight) {
-        UIBarButtonItem *button = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"nav_menu_icon.png"] style:UIBarButtonItemStyleBordered  target:self action:@selector(showRight:)];
+        UIBarButtonItem *button = [[barButtonItemClass alloc] initWithImage:[UIImage imageNamed:@"nav_menu_icon.png"] style:UIBarButtonItemStyleBordered  target:self action:@selector(showRight:)];
         topController.navigationItem.rightBarButtonItem = button;
     } else {
-        topController.navigationItem.rightBarButtonItem = nil;
+		if(topController.navigationItem.rightBarButtonItem.target == self) {
+			topController.navigationItem.rightBarButtonItem = nil;
+		}
     }
     
 }
