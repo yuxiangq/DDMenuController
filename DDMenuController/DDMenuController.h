@@ -78,5 +78,5 @@ typedef enum {
 @end
 
 @protocol DDMenuControllerDelegate 
-- (void)menuController:(DDMenuController*)controller willShowViewController:(UIViewController*)controller;
+- (void)menuController:(DDMenuController*)dController willShowViewController:(UIViewController*)controller;
 @end
